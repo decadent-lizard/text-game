@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 
 const componentArray = [
@@ -10,6 +10,7 @@ const componentArray = [
 
 function Introduction() {
   const [index, setIndex] = React.useState(0);
+  const [payload, setPayload] = useState(null);
 
   const next = () => {
     let nextIndex = index + 1;
@@ -24,14 +25,19 @@ function Introduction() {
     return () => clearInterval(interval);
   }, [index]);
 
-  switch (index){
-    case 0 :
-      return <IntroductionText text={1}/>;
-    case 1 :
-      return <IntroductionText text={2}/>;
-    case 2 :
+
+  function changethestate(data) {
+    setIndex(data);
+  }
+
+  switch (index) {
+    case 0:
+      return <IntroductionText text={1} onChange={(data) => changethestate(data)} />;
+    case 1:
+      return <IntroductionText text={2} />;
+    case 2:
       return <IntroductionText text={3} />;
-    case 3 :
+    case 3:
       return <IntroductionAnimation1 />;
     default:
       return <IntroductionText1 />;
@@ -40,8 +46,17 @@ function Introduction() {
 
 export default Introduction;
 
-function IntroductionText({text}){
-  const textData = ["Suddenly you appear","You do not know who or what you are","Something breathes you into life"]
+function IntroductionText({ text, onChange }) {
+  const [index, setIndex] = useState();
+  const textData = ["Suddenly you appear", "You do not know who or what you are", "Something breathes you into life"]
+  
+  useEffect(() => {
+    onChange(textData[0]);
+  }, [])
+
+//Serverside Rendering and static page generation
+//generate pages on your server
+
   return (
     <>
       <div className="intro-text">{textData[text-1]}</div>
